@@ -1,0 +1,16 @@
+{
+  "name": "inventory",
+  "version": "1.0.0",
+  "description": "A personal inventory manager to track inventory, expenses, and profit",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Henry Chu",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^7.1.0",
+    "inquirer-datepicker-prompt": "^0.4.2",
+    "mongodb": "^3.5.8"
+  }
+}
