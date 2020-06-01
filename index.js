@@ -361,7 +361,7 @@ async function sync(client) {
             });
 
             if (need_deletion) {
-                await month_coll.deleteOne({ _id: new ObjectId(month._id) });
+                await month_coll.deleteOne({ _id: month._id });
             }
         });
     } catch (err) {
@@ -373,9 +373,9 @@ async function sync(client) {
 
 async function deleteItem(client) {
     db = client.db('inventory');
-    collection = db.collection('items');
+    items_coll = db.collection('items');
 
-    console.log(await collection.find().toArray());
+    console.log(await items_coll.find().toArray());
 
     deletion = await inquirer.prompt([
         {
@@ -387,17 +387,17 @@ async function deleteItem(client) {
 
     console.log(deletion);
 
-    await collection.deleteOne({ _id: new ObjectId(deletion.id) })
+    await items_coll.deleteOne({ _id: new ObjectId(deletion.id) })
     .then(await sync(client))
     .then(console.log('Item deleted'));
 }
 
 async function editItem(client) {
     db = client.db('inventory');
-    collection = db.collection('items');
+    items_coll = db.collection('items');
     month_coll = db.collection('month');
 
-    console.log(await collection.find().toArray());
+    console.log(await items_coll.find().toArray());
 
     edits = await inquirer.prompt([
         {
@@ -444,9 +444,9 @@ async function editItem(client) {
 
     console.log(edits);
 
-    var old = await collection.findOne({ _id: new ObjectId(edits.id) });
+    var old = await items_coll.findOne({ _id: new ObjectId(edits.id) });
 
-    await collection.updateOne({ _id: new ObjectId(edits.id) },
+    await items_coll.updateOne({ _id: new ObjectId(edits.id) },
         { $set:
             {
                 'name': edits.name,
@@ -480,16 +480,16 @@ async function editItem(client) {
 
 async function insertItem(client, answers) {
     db = client.db('inventory');
-    collection = db.collection('items');
+    items_coll = db.collection('items');
 
-    item = {
-        name: answers.name,
-        date: answers.date,
-        expense: answers.expense,
-        deposit: answers.deposit
-    }
-
-    await collection.insertOne(item)
+    await items_coll.insertOne(
+        {
+            name: answers.name,
+            date: answers.date,
+            expense: answers.expense,
+            deposit: answers.deposit
+        }
+    )
     .then(await sync(client))
     .then(console.log('Item added'));
 }
