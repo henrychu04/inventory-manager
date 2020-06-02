@@ -4,14 +4,17 @@
   "description": "A personal inventory manager to track inventory, expenses, and profit",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon server.js"
   },
   "author": "Henry Chu",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
-    "inquirer": "^7.1.0",
-    "inquirer-datepicker-prompt": "^0.4.2",
-    "mongodb": "^3.5.8"
+    "express": "^4.17.1",
+    "mongodb": "^3.5.8",
+    "mongoose": "^5.9.16",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4"
   }
 }
