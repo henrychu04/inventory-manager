@@ -1,20 +1,19 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const uri = process.env.URI;
 
-const items_routes = require('./api/routes/items');
-const month_routes = require('./api/routes/month');
-const sync_routes = require('./api/routes/sync');
+const indexRoutes = require('./api/routes/index');
+const itemsRoutes = require('./api/routes/items');
+const monthRoutes = require('./api/routes/month');
+const syncRoutes = require('./api/routes/sync');
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -25,19 +24,20 @@ app.use((req, res, next) => {
 
     if (req.method === 'OPTIONS') {
         res.header(
-            "Access-Control-Allow-Methods", 
+            "Access-Control-Allow-Methods",
             "GET, PUT, POST, PATCH, DELETE"
         );
 
-        return res.status(200).json({});
+        return res.status(200);
     }
 
     next();
 })
 
-app.use('/items', items_routes);
-app.use('/month', month_routes);
-app.use('/sync', sync_routes);
+app.use('/', indexRoutes);
+app.use('/items', itemsRoutes);
+app.use('/month', monthRoutes);
+app.use('/sync', syncRoutes);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const month_schema = mongoose.Schema({
+const monthSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     month: Number,
-    expense: mongoose.Schema.Types.ObjectId,
-    deposit: mongoose.Schema.Types.ObjectId
+    expense: {type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    deposit: {type: mongoose.Schema.Types.ObjectId, ref: 'Product' }
 });
 
-module.exports = mongoose.model('Month', month_schema, 'month');
+module.exports = mongoose.model('Month', monthSchema, 'month');

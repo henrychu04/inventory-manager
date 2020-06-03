@@ -13,10 +13,10 @@ router.get('/', (req, res, next) => {
                 items: docs
             }
 
-            res.status(200).json(response);
+            res.status(200).send(response);
         })
         .catch(err => {
-            res.status(500).json({ err: err });
+            res.status(500).send({ err: err });
         });
 });
 
@@ -33,9 +33,9 @@ router.post('/', (req, res, next) => {
     item
         .save()
         .then(
-            res.status(201).json({
+            res.status(201).send({
                 message: 'Item added successfully',
-                item_added: item,
+                itemAdded: item,
                 request: {
                     type: 'GET',
                     description: 'Get updated item',
@@ -44,27 +44,23 @@ router.post('/', (req, res, next) => {
             })
         )
         .catch(err => {
-            res.status(500).json({
-                err: err
-            });  
+            res.status(500).send({ err: err });  
         });
-
-    Item.save();
 });
 
-router.get('/:item_id', (req, res, next) => {
-    const id = req.params.item_id;
+router.get('/:itemId', (req, res, next) => {
+    const id = req.params.itemId;
 
     Item.findById(id)
         .select('-__v')
         .then(doc => {
             if (doc) {
-                res.status(200).json(doc);
+                res.status(200).send(doc);
             } else {
-                res.status(404).json({ 
-                    message: 'No item found',
+                res.status(404).send({ 
+                    message: 'Item not found',
                     request: {
-                        type: 'Get',
+                        type: 'GET',
                         description: 'List all items',
                         url:  req.protocol + '://' + req.get('host') + req.originalUrl
                     }
@@ -72,22 +68,22 @@ router.get('/:item_id', (req, res, next) => {
             }
         })
         .catch(err => {
-            res.status(500).json({ error: err });
+            res.status(500).send({ error: err });
         });
 });
 
-router.patch('/:item_id', (req, res, next) => {
-    const id = req.params.item_id;
-    const update_ops = [];
+router.patch('/:itemId', (req, res, next) => {
+    const id = req.params.itemId;
+    const updateOps = [];
 
     for (const ops of req.body) {
-        update_ops[ops.propName] = ops.value;
+        updateOps[ops.propName] = ops.value;
     }
 
-    Item.update({ _id: id }, { $set: update_ops })
+    Item.update({ _id: id }, { $set: updateOps })
         .then(result => {
             console.log(result);
-            res.status(200).json({
+            res.status(200).send({
                 message: 'Item edited successfully',
                 request: {
                     type: 'GET',
@@ -97,22 +93,20 @@ router.patch('/:item_id', (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
+            res.status(500).send({ error: err });
         });
 });
 
-router.delete('/:item_id', (req, res, next) => {
-    const id = req.params.item_id;
+router.delete('/:itemId', (req, res, next) => {
+    const id = req.params.itemId;
 
     Item.remove({ _id: id })
         .then(result => {
             console.log(result);
-            res.status(200).json(result);
+            res.status(200).send(result);
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ err: err });
+            res.status(500).send({ err: err });
         });
 });
 
