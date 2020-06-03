@@ -15,9 +15,7 @@ router.get('/', (req, res, next) => {
 
             res.status(200).send(response);
         })
-        .catch(err => {
-            res.status(500).send({ err: err });
-        });
+        .catch(err => res.status(500).send({ err: err }));
 });
 
 router.post('/', (req, res, next) => {
@@ -48,11 +46,7 @@ router.post('/', (req, res, next) => {
                 }
             })
         )
-        .catch(err => {
-            res.status(500).send({
-                err: err
-            });
-        });
+        .catch(err => res.status(500).send({ err: err }));
 });
 
 router.get('/:saleId', (req, res, next) => {
@@ -74,9 +68,7 @@ router.get('/:saleId', (req, res, next) => {
                 });
             }
         })
-        .catch(err => {
-            res.status(500).send({ error: err });
-        });
+        .catch(err => res.status(500).send({ error: err }));
 });
 
 module.exports = router;

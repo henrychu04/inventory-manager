@@ -28,16 +28,8 @@ router.get('/', async function(req, res, next) {
 
         if (!match) {
             await addToMonth(items[i])
-                .then(
-                    res.status(200).json({
-                        message: 'Synced'
-                    })
-                )
-                .catch(err => {
-                    res.status(500).json({
-                        err: err
-                    });
-                });
+                .then(res.status(200).send({ message: 'Synced' }))
+                .catch(err => res.status(500).send({ err: err }));
         }
     }
 
@@ -58,22 +50,12 @@ router.get('/', async function(req, res, next) {
 
         if (needDeletion) {
             await Month.remove({ _id: months[i]._id })
-                .then(
-                    res.status(200).json({
-                        message: 'Synced'
-                    })
-                )
-                .catch(err => {
-                    res.status(500).json({
-                        err: err
-                    });
-                });
+                .then(res.status(200).send({ message: 'Synced' }))
+                .catch(err => res.status(500).send({ err: err }));
         }
     }
 
-    res.status(200).json({
-        message: 'Synced'
-    });
+    res.status(200).send({ message: 'Synced' });
 });
 
 async function addToMonth(item) {
@@ -93,9 +75,7 @@ async function addToMonth(item) {
 
     await month
         .save()
-        .catch(err => {
-            console.log(err); 
-        });
+        .catch(err => console.log(err) );
 }
 
 module.exports = router;

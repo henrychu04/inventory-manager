@@ -15,9 +15,7 @@ router.get('/', (req, res, next) => {
 
             res.status(200).send(response);
         })
-        .catch(err => {
-            res.status(500).send({ err: err });
-        });
+        .catch(err => res.status(500).send({ err: err }));
 });
 
 router.post('/', (req, res, next) => {
@@ -43,9 +41,7 @@ router.post('/', (req, res, next) => {
                 }
             })
         )
-        .catch(err => {
-            res.status(500).send({ err: err });  
-        });
+        .catch(err => res.status(500).send({ err: err }));
 });
 
 router.get('/:itemId', (req, res, next) => {
@@ -67,9 +63,7 @@ router.get('/:itemId', (req, res, next) => {
                 });
             }
         })
-        .catch(err => {
-            res.status(500).send({ error: err });
-        });
+        .catch(err => res.status(500).send({ error: err }));
 });
 
 router.patch('/:itemId', (req, res, next) => {
@@ -81,8 +75,7 @@ router.patch('/:itemId', (req, res, next) => {
     }
 
     Item.update({ _id: id }, { $set: updateOps })
-        .then(result => {
-            console.log(result);
+        .then(
             res.status(200).send({
                 message: 'Item edited successfully',
                 request: {
@@ -90,11 +83,9 @@ router.patch('/:itemId', (req, res, next) => {
                     description: 'Get updated item',
                     url:  req.protocol + '://' + req.get('host') + req.originalUrl + req.params.item_id
                 }
-            });
-        })
-        .catch(err => {
-            res.status(500).send({ error: err });
-        });
+            })
+        )
+        .catch(err => res.status(500).send({ error: err }));
 });
 
 router.delete('/:itemId', (req, res, next) => {
@@ -103,11 +94,9 @@ router.delete('/:itemId', (req, res, next) => {
     Item.remove({ _id: id })
         .then(result => {
             console.log(result);
-            res.status(200).send(result);
+            res.status(200).send({ message: 'Item deleted' });
         })
-        .catch(err => {
-            res.status(500).send({ err: err });
-        });
+        .catch(err => res.status(500).send({ err: err }));
 });
 
 module.exports = router;
